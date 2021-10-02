@@ -1,2 +1,4 @@
-# Election_Analysis
-Analyzing election results using python
+# Election Analysis
+
+## Overview of Election Audit
+Purpose 
