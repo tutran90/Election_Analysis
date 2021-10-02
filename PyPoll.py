@@ -11,6 +11,20 @@ file_to_load = os.path.join('election_results.csv')
 #Create a filename variable to driect or indirect path to the file.
 file_to_save = os.path.join("analysis", "election_analysis.txt")
 
+#1.Initialize total votes counter
+total_votes = 0
+
+#Candidate options
+candidate_options = []
+
+#Declaring an empty dictionary for candidate votes:
+candidate_votes = {}
+
+#Declaring the winning candidate and winning count tracker
+winning_candidate = ""
+winning_count = 0
+winning_percentage = 0
+
 #Open the election results and read the file
 #election_data = open(file_to_load, 'r') one way to open and read the file with open() and close()
 with open(file_to_load) as election_data:
@@ -32,29 +46,76 @@ with open(file_to_load) as election_data:
     #To do: read & analyze the data here.
     file_reader = csv.reader(election_data)
 
-    #print the header row.
+    #Read & print the header row.
     headers = next(file_reader)
-    print(headers)
+    #print(headers)
 
 #print each row in the CSV file.
-    #for row in file_reader:
-    #    print(row)
+    for row in file_reader:
+        #2. Add to the total vote count.
+        total_votes += 1
 
-#write 3 counties to the file. there are no spaces if it is written this way. 
-#to have spaces, need to add a comma and a space
-    #txt_file.write("Arapahoe")
-    #txt_file.write("Denver")
-    #txt_file.write("Jefferson")
-    #txt_file.write("Arapahoe, ")
-    #txt_file.write("Denver, ")
-    #txt_file.write("Jefferson")
-#to add all three counties to one line: will have the same output as the previous one all on one line
-    #txt_file.write("Arapahoe, Denver, Jefferson")
-#to write each county line on a separate line, add the "newline escape" sequence to the end of each county name
-#\n<name>, to add a line of dashes between the headers use \n after the title then use print('-'*#)
-    #txt_file.write("Counties in the Election\n")
-    #txt_file.write('-'*80)
-    #txt_file.write("\nArapahoe\nDenver\nJefferson")
+        #Print the candidate name from each row.
+        candidate_name = row[2]
+
+        #if the candidate does not match any exiting candidate... using "if ... not in" statement 
+        if candidate_name not in candidate_options:   
+
+            #Add the candidate name to the candidate list/options.
+            candidate_options.append(candidate_name)
+
+            #Begin tracking the candidate's vote count
+            candidate_votes[candidate_name] = 0          
+
+        #Add a vote to that candidate's count
+        candidate_votes[candidate_name] += 1  
+
+    #Determine the % of votes for each candidate by looping thru the counts
+    #1. Iterate through the candidate list. 
+    for candidate_name in candidate_votes:
+        #2 Retrieve vote cont of a candidate. candidate_votes[candidate_name] is calling for the values
+        #candidate_name is the key in the candidate_votes dictionary. therefore votes = the candidate_name value
+        votes = candidate_votes[candidate_name]
+        #3. Calculate the percentage of votes
+        #vote_percentage is a new variable taking votes/total votes (**where did total votes come from)
+        vote_percentage = float(votes) / float(total_votes) * 100 
+        #print the candidate name and percentage of votes.
+        #pringt out the candidate name (need to make sure there is a : or it won't work. )
+        #print(f"{candidate_name}: received {vote_percentage:.2f}% of the vote")
+
+        #Determine if the vote count is greater than the winning_count
+        #1. If the vote count is > winning_count and percentage is > winning_percentage 
+        if (votes > winning_count) and (vote_percentage > winning_percentage):
+
+            #2. set the winning_count = votes and set winning_percentage = vote_percentage 
+            winning_count = votes
+            winning_percentage = vote_percentage 
+
+            #3. set the winning_count = candidate_name in the for loop
+            winning_candidate = candidate_name
+        #Print out each candidate's name, vote count, & percentage of votes to the terminal
+        ##need to make sure that this is in line with the if statement or else it will not print everything
+        ##prints out the value for the candidate_name and the vote_percentage to 1 decimal place
+        ##and votes, separating each candidate by a new line \n
+        print(f"{candidate_name}: {vote_percentage:.1f}% ({votes:,})\n")
+    ##how does this know which one has the highest score already
+    winning_candidate_summary = (
+        f"-------------------------\n"
+        f"Winner: {winning_candidate}\n"
+        f"Winning Vote Count: {winning_count:,}\n"
+        f"Winning Percentage: {winning_percentage:.1f}%\n"
+        f"--------------------------\n")
+    print(winning_candidate_summary)
+
+
+#3. Print the total votes.
+#print(total_votes)
+
+#print the candidate list.
+#print(candidate_options)
+
+#print the candidate vote dictionary 
+#print(candidate_votes)
 
 #1. Total number of votes cast
 #2. A complete list of candidates who received votes
