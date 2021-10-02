@@ -68,7 +68,22 @@ with open(file_to_load) as election_data:
             candidate_votes[candidate_name] = 0          
 
         #Add a vote to that candidate's count
-        candidate_votes[candidate_name] += 1  
+        candidate_votes[candidate_name] += 1 
+#Save the results to our text file: 
+with open(file_to_save, "w") as txt_file:
+    
+    #writing the election_results:
+    txt_file.write(f"\nElection Results\n")
+    txt_file.write(f"---------------------\n")
+    txt_file.write(f"Total Votes {total_votes:,}\n")
+    txt_file.write(f"----------------------")
+    #another way to write this:
+    #election_results = (
+    # f"\nElection\n"
+    # f"-----------------\n"
+    # f"Total Votes: {total_votes:,}\n"
+    # f"-----------------\n")
+    #print(election_results, end="")
 
     #Determine the % of votes for each candidate by looping thru the counts
     #1. Iterate through the candidate list. 
@@ -97,7 +112,16 @@ with open(file_to_load) as election_data:
         ##need to make sure that this is in line with the if statement or else it will not print everything
         ##prints out the value for the candidate_name and the vote_percentage to 1 decimal place
         ##and votes, separating each candidate by a new line \n
-        print(f"{candidate_name}: {vote_percentage:.1f}% ({votes:,})\n")
+        #print(f"{candidate_name}: {vote_percentage:.1f}% ({votes:,})\n")
+
+        #print the candidate_results but setting the results as a variable
+        ##this needs to go after the if statement to print out what we just coded. If you add it on the same 1st column it won't print correctly.
+        candidate_results = (f"\n{candidate_name}: {vote_percentage:.1f}% ({votes:,})")
+        print(candidate_results)
+        #save the candidate results to our text file. 
+        txt_file.write(candidate_results)
+    txt_file.write(f'\n-------------------------')
+
     ##how does this know which one has the highest score already
     winning_candidate_summary = (
         f"-------------------------\n"
@@ -105,8 +129,10 @@ with open(file_to_load) as election_data:
         f"Winning Vote Count: {winning_count:,}\n"
         f"Winning Percentage: {winning_percentage:.1f}%\n"
         f"--------------------------\n")
-    print(winning_candidate_summary)
 
+    #print(winning_candidate_summary)
+    #save the winning candidate's name to text file.
+    txt_file.write(winning_candidate_summary)
 
 #3. Print the total votes.
 #print(total_votes)
